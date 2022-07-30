@@ -6,11 +6,7 @@ This is a personal project to create a roguelike game following the steps of [ro
 
 ## Roguelike
 
-Roguelike ou rogue-like é um subgênero de jogos RPG, caracterizado pela geração de nível aleatória ou procedural durante a partida, mapa geralmente baseado em ladrilho e morte permanente, e normalmente cenário com uma temática de alta fantasia.
-
-Roguelikes são descendentes do jogo Rogue, de 1980, particularmente espelhando-se no quesito de gráficos ASCII ou Sprite, jogabilidade baseado em turnos, e narrativa alta fantasia. Jogos que seguem todas essas características são chamados de "clássico" ou "Berlin". Também há variações de roguelikes, incorporando outros estilos, roteiro, gráfico, e se tornaram populares, sendo também chamados de "roguelike-like", "rogue-lite" ou "procedural death labyrinths" para refletir que são variações do título original, com algumas pequenas mudanças em cada caso.
-
-- Wikipédia
+> Roguelike ou rogue-like é um subgênero de jogos RPG, caracterizado pela geração de nível aleatória ou procedural durante a partida, mapa geralmente baseado em ladrilho e morte permanente, e normalmente cenário com uma temática de alta fantasia.Roguelikes são descendentes do jogo Rogue, de 1980, particularmente espelhando-se no quesito de gráficos ASCII ou Sprite, jogabilidade baseado em turnos, e narrativa alta fantasia. Jogos que seguem todas essas características são chamados de "clássico" ou "Berlin". Também há variações de roguelikes, incorporando outros estilos, roteiro, gráfico, e se tornaram populares, sendo também chamados de "roguelike-like", "rogue-lite" ou "procedural death labyrinths" para refletir que são variações do título original, com algumas pequenas mudanças em cada caso. - Wikipédia
 
 ## Main Tutorial:
 
