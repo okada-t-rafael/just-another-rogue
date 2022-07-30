@@ -1,9 +1,9 @@
 import tcod
-from game_map import GameMap
 
 from just_another_rogue.engine import Engine
 from just_another_rogue.entity import Entity
 from just_another_rogue.input_handlers import EventHandler
+from just_another_rogue.procgen import generate_dungeon
 
 
 def main() -> bool:
@@ -12,6 +12,10 @@ def main() -> bool:
 
     map_width = 80
     map_height = 50
+
+    room_max_size = 10
+    room_min_size = 6
+    max_rooms = 30
 
     event_handler = EventHandler()
 
@@ -34,7 +38,14 @@ def main() -> bool:
         color=(255, 255, 0))
 
     entities = {npc, player}
-    game_map = GameMap(map_width, map_height)
+    game_map = generate_dungeon(
+        max_rooms=max_rooms,
+        room_min_size=room_min_size,
+        room_max_size=room_max_size,
+        map_width=map_width,
+        map_heigth=map_height,
+        player=player
+    )
 
     engine = Engine(entities, event_handler, game_map, player)
 

@@ -12,13 +12,13 @@ class GameMap:
     Properties:
         width (int): Width of this map.
         height (int): Height of this map.
-        tiles (np.ndarray): 2D array filled with tiles representing the floor.
+        tiles (np.ndarray): 2D array filled with tiles representing the wall.
     """
     def __init__(self, width: int, height: int) -> None:
         self.width = width
         self.height = height
         self.tiles = np.full(
-            (width, height), fill_value=tile_types.floor, order="F")
+            (width, height), fill_value=tile_types.wall, order="F")
 
         self.tiles[30:33, 22] = tile_types.wall
 
