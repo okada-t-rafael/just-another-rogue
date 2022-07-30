@@ -6,7 +6,9 @@ This is a personal project to create a roguelike game following the steps of [ro
 
 ## Roguelike
 
-> Roguelike ou rogue-like é um subgênero de jogos RPG, caracterizado pela geração de nível aleatória ou procedural durante a partida, mapa geralmente baseado em ladrilho e morte permanente, e normalmente cenário com uma temática de alta fantasia.Roguelikes são descendentes do jogo Rogue, de 1980, particularmente espelhando-se no quesito de gráficos ASCII ou Sprite, jogabilidade baseado em turnos, e narrativa alta fantasia. Jogos que seguem todas essas características são chamados de "clássico" ou "Berlin". Também há variações de roguelikes, incorporando outros estilos, roteiro, gráfico, e se tornaram populares, sendo também chamados de "roguelike-like", "rogue-lite" ou "procedural death labyrinths" para refletir que são variações do título original, com algumas pequenas mudanças em cada caso. - Wikipédia
+Roguelike (or rogue-like) is a subgenre of role-playing computer games traditionally characterized by a dungeon crawl through procedurally generated levels, turn-based gameplay, grid-based movement, and permanent death of the player character. Most roguelikes are based on a high fantasy narrative, reflecting their influence from tabletop role playing games such as Dungeons & Dragons.
+
+Though Beneath Apple Manor predates it, the 1980 game Rogue, which is an ASCII based game that runs in terminal or terminal emulator, is considered the forerunner and the namesake of the genre, with derivative games mirroring Rogue's character- or sprite-based graphics. These games were popularized among college students and computer programmers of the 1980s and 1990s, leading to hundreds of variants. Some of the better-known variants include Hack, NetHack, Ancient Domains of Mystery, Moria, Angband, Tales of Maj'Eyal, and Dungeon Crawl Stone Soup. The Japanese series of Mystery Dungeon games by Chunsoft, inspired by Rogue, also fall within the concept of roguelike games.
 
 ## Main Tutorial:
 
