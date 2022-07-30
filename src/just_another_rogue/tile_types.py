@@ -32,8 +32,8 @@ dark (graphic_dt): This uses our previously defined dtype, which holds the
 """
 tile_dt = np.dtype(
     [
-        ("walkable", np.bool),
-        ("transparent", np.bool),
+        ("walkable", np.bool8),
+        ("transparent", np.bool8),
         ("dark", graphic_dt),
     ]
 )
