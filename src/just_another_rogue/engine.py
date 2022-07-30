@@ -3,8 +3,8 @@ import typing as t
 from tcod.console import Console
 from tcod.context import Context
 
-from just_another_rogue.actions import EscapeAction, MovementAction
 from just_another_rogue.entity import Entity
+from just_another_rogue.game_map import GameMap
 from just_another_rogue.input_handlers import EventHandler
 
 
@@ -17,6 +17,7 @@ class Engine:
             enforces uniqueness. That is, we can't add an Entity to the set
             twice, where as a list would allow that.
         event_handler (EventHandler): It will handle our events.
+        game_map (GameMap): The representation of the map.
         player (Entity): Is the player Entity. We have a separate reference to
             it outside of entities for ease of access. We'll need to access
             player a lot more than a random entity in entities.
@@ -25,10 +26,12 @@ class Engine:
         self,
         entities: t.Set[Entity],
         event_handler: EventHandler,
+        game_map: GameMap,
         player: Entity
     ) -> None:
         self.entities = entities
         self.event_handler = event_handler
+        self.game_map = game_map
         self.player = player
 
     def handle_events(self, events: t.Iterable[t.Any]) -> None:
@@ -44,15 +47,12 @@ class Engine:
             if action is None:
                 continue
 
-            if isinstance(action, MovementAction):
-                self.player.move(dx=action.dx, dy=action.dy)
-
-            elif isinstance(action, EscapeAction):
-                raise SystemExit()
+            action.perform(self, self.player)
 
     def render(self, console: Console, context: Context) -> None:
         """
-        Render handles drawing our screen. We iterate through the self.entities
+        Render handles drawing our screen. call for the GameMap's render
+            method. And then we iterate through the self.entities
             and print them to ther proper locations, then present the context,
             and clear the console.
         Parameters:
@@ -60,6 +60,8 @@ class Engine:
                 with foreground/background colors.
             context (Context): Context manager for libtcod context objects.
         """
+        self.game_map.render(console)
+
         for entity in self.entities:
             console.print(entity.x, entity.y, entity.char, fg=entity.color)
 

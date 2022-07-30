@@ -1,4 +1,5 @@
 import tcod
+from game_map import GameMap
 
 from just_another_rogue.engine import Engine
 from just_another_rogue.entity import Entity
@@ -8,6 +9,9 @@ from just_another_rogue.input_handlers import EventHandler
 def main() -> bool:
     screen_width = 80
     screen_height = 50
+
+    map_width = 80
+    map_height = 50
 
     event_handler = EventHandler()
 
@@ -30,8 +34,9 @@ def main() -> bool:
         color=(255, 255, 0))
 
     entities = {npc, player}
+    game_map = GameMap(map_width, map_height)
 
-    engine = Engine(entities, event_handler, player)
+    engine = Engine(entities, event_handler, game_map, player)
 
     with tcod.context.new_terminal(
         screen_width,
