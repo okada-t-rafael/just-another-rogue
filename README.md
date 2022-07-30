@@ -30,4 +30,4 @@ Roguelikes são descendentes do jogo Rogue, de 1980, particularmente espelhando-
 - [ ] Part 13 - Gearing up
 
 ## Extras:
-- [] A more "Traditional" Look
+- [ ] Extra - A more "Traditional" Look
