@@ -1,15 +1,13 @@
 import tcod
 
-from just_another_rogue.actions import EscapeAction, MovementAction
+from just_another_rogue.engine import Engine
+from just_another_rogue.entity import Entity
 from just_another_rogue.input_handlers import EventHandler
 
 
 def main() -> bool:
     screen_width = 80
     screen_height = 50
-
-    player_x = int(screen_width / 2)
-    player_y = int(screen_height / 2)
 
     event_handler = EventHandler()
 
@@ -18,6 +16,22 @@ def main() -> bool:
         columns=32,
         rows=8,
         charmap=tcod.tileset.CHARMAP_TCOD)
+
+    player = Entity(
+        x=int(screen_width / 2),
+        y=int(screen_height / 2),
+        char="@",
+        color=(255, 255, 255))
+
+    npc = Entity(
+        x=int(screen_width / 2),
+        y=int(screen_height / 2 - 5),
+        char="@",
+        color=(255, 255, 0))
+
+    entities = {npc, player}
+
+    engine = Engine(entities, event_handler, player)
 
     with tcod.context.new_terminal(
         screen_width,
@@ -33,21 +47,9 @@ def main() -> bool:
             order="F")
 
         while True:
-            root_console.print(x=player_x, y=player_y, string="@")
-            context.present(root_console)
-            root_console.clear()
-
-            for event in tcod.event.wait():
-                action = event_handler.dispatch(event)
-
-                if action is None:
-                    continue
-
-                if isinstance(action, MovementAction):
-                    player_x += action.dx
-                    player_y += action.dy
-                elif isinstance(action, EscapeAction):
-                    raise SystemExit()
+            engine.render(console=root_console, context=context)
+            events = tcod.event.wait()
+            engine.handle_events(events)
 
 
 if __name__ == "__main__":

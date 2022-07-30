@@ -21,6 +21,9 @@ class MovementAction(Action):
         More than just knowing that the player is trying to move, MovemntAction
         tell us where the player is trying to move to with the properties dx
         and dy.
+    Properties:
+        dx (int): Amount of units to move in the x direciton.
+        dy (int): Amount of units to move in the y direciton.
     """
     def __init__(self, dx: int, dy: int) -> None:
         super().__init__()
