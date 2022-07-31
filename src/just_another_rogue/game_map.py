@@ -13,6 +13,8 @@ class GameMap:
         width (int): Width of this map.
         height (int): Height of this map.
         tiles (np.ndarray): 2D array filled with tiles representing the wall.
+        visible (np.ndarray): Tiles the player can currently see
+        explored (np.ndarray): Tiles the player has seen before
     """
     def __init__(self, width: int, height: int) -> None:
         self.width = width
@@ -20,7 +22,8 @@ class GameMap:
         self.tiles = np.full(
             (width, height), fill_value=tile_types.wall, order="F")
 
-        self.tiles[30:33, 22] = tile_types.wall
+        self.visible = np.full((width, height), fill_value=False, order="F")
+        self.explored = np.full((width, height), fill_value=False, order="F")
 
     def in_bounds(self, x: int, y: int) -> bool:
         """
@@ -36,11 +39,20 @@ class GameMap:
 
     def render(self, console: Console) -> None:
         """
-        Using Console class's tiles_rgb method, we can quickly render the
-            entire map. This method proves much faster than using the
-            console.print method that we use for the individual entitites.
+        Renders the map. If a tile is in the "visible" array, then draw it with
+            the "light" colors. If it isn't, but it's in the "explored" array,
+            then draw it with the "dark" color. Otherwise, the default is
+            "SHROUD".
         Parameters:
             console (Console): A console object containing a grid of characters
                 with foreground/background colors.
+        Note:
+            Using Console class's tiles_rgb method, we can quickly render the
+                entire map. This method proves much faster than using the
+                console.print method that we use for the individual entitites.
         """
-        console.tiles_rgb[0:self.width, 0:self.height] = self.tiles["dark"]
+        console.tiles_rgb[0:self.width, 0:self.height] = np.select(
+            condlist=[self.visible, self.explored],
+            choicelist=[self.tiles["light"], self.tiles["dark"]],
+            default=tile_types.SHROUD
+        )
