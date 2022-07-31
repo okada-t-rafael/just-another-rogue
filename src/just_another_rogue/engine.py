@@ -11,12 +11,9 @@ from just_another_rogue.input_handlers import EventHandler
 
 class Engine:
     """
-    Engine class responsibilities is to draw the map and the entities, as well
-        as handling the player's input.
+    Engine class responsibilities is to draw the map, as well as handling the
+        player's input.
     Properties:
-        entities (Set[Entity]): Is a set, which behaves kind of like a list
-            enforces uniqueness. That is, we can't add an Entity to the set
-            twice, where as a list would allow that.
         event_handler (EventHandler): It will handle our events.
         game_map (GameMap): The representation of the map.
         player (Entity): Is the player Entity. We have a separate reference to
@@ -25,16 +22,25 @@ class Engine:
     """
     def __init__(
         self,
-        entities: t.Set[Entity],
         event_handler: EventHandler,
         game_map: GameMap,
         player: Entity
     ) -> None:
-        self.entities = entities
         self.event_handler = event_handler
         self.game_map = game_map
         self.player = player
         self.update_fov()
+
+    def handle_enemy_turns(self) -> None:
+        """
+        This function loops through each entity (minus the player) and prints
+            out a message for them. TODO: Replacee this with some code that
+            will allow those entities to take real turns.
+        """
+        for entity in self.game_map.entities - {self.player}:
+            print(
+                f"The {entity.name} wonders when it "
+                "will get to take a real turn.")
 
     def handle_events(self, events: t.Iterable[t.Any]) -> None:
         """
@@ -50,6 +56,7 @@ class Engine:
                 continue
 
             action.perform(self, self.player)
+            self.handle_enemy_turns()
             self.update_fov()  # Update the FOV before the players next action.
 
     def update_fov(self) -> None:
@@ -76,10 +83,5 @@ class Engine:
             context (Context): Context manager for libtcod context objects.
         """
         self.game_map.render(console)
-
-        for entity in self.entities:
-            if self.game_map.visible[entity.x, entity.y]:
-                console.print(entity.x, entity.y, entity.char, fg=entity.color)
-
         context.present(console)
         console.clear()

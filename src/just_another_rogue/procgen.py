@@ -4,6 +4,7 @@ import random
 import tcod
 import typing as t
 
+from just_another_rogue import entity_factories
 from just_another_rogue import tile_types
 from just_another_rogue.entity import Entity
 from just_another_rogue.game_map import GameMap
@@ -71,6 +72,33 @@ class RectangularRoom:
         )
 
 
+def place_entities(
+    room: RectangularRoom,
+    dungeon: GameMap,
+    maximum_monsters: int
+) -> None:
+    """
+    Function to pu the entities in their place.
+    Parameters:
+        room (RectangularRoom): An instance of RectangularRoom to place the
+            entity.
+        dungeon (GameMap): Instance of GameMap, which holds entities.
+        maximum_monters (int): Max number of monsters to place.
+    """
+    number_of_monsters = random.randint(0, maximum_monsters)
+    for i in range(number_of_monsters):
+        x = random.randint(room.x1 + 1, room.x2 - 1)
+        y = random.randint(room.y1 + 1, room.y2 - 1)
+
+        if not any(
+            [entity.x == x and entity.y == y for entity in dungeon.entities]
+        ):
+            if random.random() < 0.8:
+                entity_factories.orc.spaws(dungeon, x, y)
+            else:
+                entity_factories.troll.spaws(dungeon, x, y)
+
+
 def tunel_between(
     start: t.Tuple[int, int],
     end: t.Tuple[int, int],
@@ -124,6 +152,7 @@ def generate_dungeon(
     room_max_size: int,
     map_width: int,
     map_heigth: int,
+    max_monster_per_room: int,
     player: Entity,
 ) -> GameMap:
     """
@@ -134,12 +163,14 @@ def generate_dungeon(
         room_max_size (int): The maximum size of one room.
         map_width (int): The width of the GameMap to create.
         map_height (int): The heigth of the GameMap to create.
+        max_monster_per_room (int): Maximum number of monters that can be
+            spawned into a room.
         player (Player): The player Entity. We need this to know where to place
             the player.
     Returns:
         GameMap:
     """
-    dungeon = GameMap(map_width, map_heigth)
+    dungeon = GameMap(map_width, map_heigth, entities=[player])
     rooms: t.List[RectangularRoom] = []
 
     for _ in range(max_rooms):
@@ -160,6 +191,7 @@ def generate_dungeon(
             for x, y in tunel_between(rooms[-1].center, new_room.center):
                 dungeon.tiles[x, y] = tile_types.floor
 
+        place_entities(new_room, dungeon, max_monster_per_room)
         rooms.append(new_room)
 
     return dungeon

@@ -1,7 +1,13 @@
+from __future__ import annotations
+
 import numpy as np
+import typing as t
 from tcod.console import Console
 
 from just_another_rogue import tile_types
+
+if t.TYPE_CHECKING:
+    from just_another_rogue.entity import Entity
 
 
 class GameMap:
@@ -12,18 +18,52 @@ class GameMap:
     Properties:
         width (int): Width of this map.
         height (int): Height of this map.
+        entities (Set[Entity]): Is a set, which behaves kind of like a list
+            enforces uniqueness. That is, we can't add an Entity to the set
+            twice, where as a list would allow that.
         tiles (np.ndarray): 2D array filled with tiles representing the wall.
         visible (np.ndarray): Tiles the player can currently see
         explored (np.ndarray): Tiles the player has seen before
     """
-    def __init__(self, width: int, height: int) -> None:
+    def __init__(
+        self,
+        width: int,
+        height: int,
+        entities: t.Iterable[Entity] = ()
+    ) -> None:
         self.width = width
         self.height = height
+        self.entities = set(entities)
         self.tiles = np.full(
             (width, height), fill_value=tile_types.wall, order="F")
-
         self.visible = np.full((width, height), fill_value=False, order="F")
         self.explored = np.full((width, height), fill_value=False, order="F")
+
+    def get_blocking_entity_at_location(
+        self,
+        location_x: int,
+        location_y: int
+    ) -> t.Optional[Entity]:
+        """
+        This function iterates through all the entities, and if one is found
+            that is found that blocks movement and occupies the given
+            location_x and location_y coordinates, it returns that Entity.
+        Parameters:
+            location_x (int): The x coordiate of the position that the player
+                is trying to move.
+            location_y (int): The y coordiate of the position that the player
+                is trying to move.
+        Return:
+            Optional[Entity]: Returns the entity that is blocking the position
+                that the player is trying to move to.
+        """
+        for entity in self.entities:
+            if (
+                entity.blocks_movement and
+                entity.x == location_x and entity.y == location_y
+            ):
+                return entity
+        return None
 
     def in_bounds(self, x: int, y: int) -> bool:
         """
@@ -56,3 +96,11 @@ class GameMap:
             choicelist=[self.tiles["light"], self.tiles["dark"]],
             default=tile_types.SHROUD
         )
+
+        for entity in self.entities:
+            if self.visible[entity.x, entity.y]:
+                console.print(
+                    x=entity.x,
+                    y=entity.y,
+                    string=entity.char,
+                    fg=entity.color)

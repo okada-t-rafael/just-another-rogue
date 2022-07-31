@@ -2,7 +2,7 @@
 
 ![Tests](https://github.com/okada-t-rafael/just-another-rogue/actions/workflows/tests.yml/badge.svg)
 
-This is a personal project to create a roguelike game following the steps of [rogueliketutorials](<https://rogueliketutorials.com/tutorials/tcod/v2/>).
+This is a personal project to create a roguelike game following the steps of [rogueliketutorials](<https://rogueliketutorials.com/tutorials/>).
 
 ## Roguelike
 
@@ -17,7 +17,7 @@ Though Beneath Apple Manor predates it, the 1980 game Rogue, which is an ASCII b
 - [x] Part 2 - The generic Entity, the render functions, and the map
 - [x] Part 3 - Generating a dungeon
 - [x] Part 4 - Field of view
-- [ ] Part 5 - Placing enemies and kicking them (harmlessly)
+- [x] Part 5 - Placing enemies and kicking them (harmlessly)
 - [ ] Part 6 - Doing (and taking) some damage
 - [ ] Part 7 - Creating the Interface
 - [ ] Part 8 - Items and Inventory

@@ -1,7 +1,7 @@
 import tcod.event
 import typing as t
 
-from just_another_rogue.actions import Action, EscapeAction, MovementAction
+from just_another_rogue.actions import Action, BumpAction, EscapeAction
 
 
 class EventHandler(tcod.event.EventDispatch[Action]):
@@ -27,9 +27,9 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         """
         key = event.sym
         actions = {
-            tcod.event.K_UP: MovementAction(dx=0, dy=-1),
-            tcod.event.K_DOWN: MovementAction(dx=0, dy=1),
-            tcod.event.K_LEFT: MovementAction(dx=-1, dy=0),
-            tcod.event.K_RIGHT: MovementAction(dx=1, dy=0),
+            tcod.event.K_UP: BumpAction(dx=0, dy=-1),
+            tcod.event.K_DOWN: BumpAction(dx=0, dy=1),
+            tcod.event.K_LEFT: BumpAction(dx=-1, dy=0),
+            tcod.event.K_RIGHT: BumpAction(dx=1, dy=0),
         }
         return actions.get(key, EscapeAction())

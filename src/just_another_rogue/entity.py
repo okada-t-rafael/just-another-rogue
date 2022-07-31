@@ -1,4 +1,13 @@
+from __future__ import annotations
+
+import copy
 import typing as t
+
+
+if t.TYPE_CHECKING:
+    from just_another_rogue.game_map import GameMap
+
+T = t.TypeVar("T", bound="Entity")
 
 
 class Entity:
@@ -13,18 +22,40 @@ class Entity:
         color (Tuple[int, int, int]): Is the color we'll use when drawing the
             Entity. We define color as a Tuple of three integers, representing
             the entity's RGB values.
+        name (str): It's what the Entity is called.
+        blocks_movement (bool): Describes whether or not his Entity can be
+            moved over or not. Enemies will have blocks_movement set to True,
+            things like consumable items and equipment will be set to False.
     """
     def __init__(
         self,
-        x: int,
-        y: int,
-        char: str,
-        color: t.Tuple[int, int, int]
+        x: int = 0,
+        y: int = 0,
+        char: str = "?",
+        color: t.Tuple[int, int, int] = (255, 255, 255),
+        name: str = "<Unnamed>",
+        blocks_movement: bool = False
     ) -> None:
         self.x = x
         self.y = y
         self.char = char
         self.color = color
+        self.name = name
+        self.blocks_movement = blocks_movement
+
+    def spaws(self: T, game_map: GameMap, x: int, y: int) -> T:
+        """
+        Spawn a copy of this instance at the given location.
+        Parameters:
+            gamemap (GameMap): Instance of GameMap that will hold this entity.
+            x (int): The x coordinate of the new instance location.
+            y (int): The y coordinate of the new instance location.
+        """
+        clone = copy.deepcopy(self)
+        clone.x = x
+        clone.y = y
+        game_map.entities.add(clone)
+        return clone
 
     def move(self, dx: int, dy: int) -> None:
         """
