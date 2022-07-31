@@ -16,7 +16,7 @@ Though Beneath Apple Manor predates it, the 1980 game Rogue, which is an ASCII b
 - [x] Part 1 - Drawing the '@' symbom and moving it around
 - [x] Part 2 - The generic Entity, the render functions, and the map
 - [x] Part 3 - Generating a dungeon
-- [ ] Part 4 - Field of view
+- [x] Part 4 - Field of view
 - [ ] Part 5 - Placing enemies and kicking them (harmlessly)
 - [ ] Part 6 - Doing (and taking) some damage
 - [ ] Part 7 - Creating the Interface
