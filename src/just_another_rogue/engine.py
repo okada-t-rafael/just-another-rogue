@@ -1,12 +1,15 @@
-import typing as t
+from __future__ import annotations
 
+import typing as t
 from tcod.console import Console
 from tcod.context import Context
 from tcod.map import compute_fov
 
-from just_another_rogue.entity import Entity
-from just_another_rogue.game_map import GameMap
 from just_another_rogue.input_handlers import EventHandler
+
+if t.TYPE_CHECKING:
+    from just_another_rogue.entity import Entity
+    from just_another_rogue.game_map import GameMap
 
 
 class Engine:
@@ -14,22 +17,16 @@ class Engine:
     Engine class responsibilities is to draw the map, as well as handling the
         player's input.
     Properties:
-        event_handler (EventHandler): It will handle our events.
-        game_map (GameMap): The representation of the map.
         player (Entity): Is the player Entity. We have a separate reference to
             it outside of entities for ease of access. We'll need to access
             player a lot more than a random entity in entities.
+        event_handler (EventHandler): It will handle our events.
+        game_map (GameMap): The representation of the map.
     """
-    def __init__(
-        self,
-        event_handler: EventHandler,
-        game_map: GameMap,
-        player: Entity
-    ) -> None:
-        self.event_handler = event_handler
-        self.game_map = game_map
+    def __init__(self, player: Entity) -> None:
         self.player = player
-        self.update_fov()
+        self.event_handler = EventHandler(self)
+        self.game_map: GameMap
 
     def handle_enemy_turns(self) -> None:
         """
@@ -39,25 +36,8 @@ class Engine:
         """
         for entity in self.game_map.entities - {self.player}:
             print(
-                f"The {entity.name} wonders when it "
-                "will get to take a real turn.")
-
-    def handle_events(self, events: t.Iterable[t.Any]) -> None:
-        """
-        Method to handle the events. We pass the events to it so it can iterate
-            through them.
-        Parameters:
-            events (Iterable[Any]): "List" of events.
-        """
-        for event in events:
-            action = self.event_handler.dispatch(event)
-
-            if action is None:
-                continue
-
-            action.perform(self, self.player)
-            self.handle_enemy_turns()
-            self.update_fov()  # Update the FOV before the players next action.
+                f"The {entity.name} wonders when "
+                "it will get to take a real turn.")
 
     def update_fov(self) -> None:
         """

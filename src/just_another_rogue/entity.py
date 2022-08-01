@@ -34,7 +34,8 @@ class Entity:
         char: str = "?",
         color: t.Tuple[int, int, int] = (255, 255, 255),
         name: str = "<Unnamed>",
-        blocks_movement: bool = False
+        blocks_movement: bool = False,
+        game_map: t.Optional[GameMap] = None
     ) -> None:
         self.x = x
         self.y = y
@@ -42,6 +43,10 @@ class Entity:
         self.color = color
         self.name = name
         self.blocks_movement = blocks_movement
+
+        if game_map:
+            self.game_map = game_map
+            self.game_map.entities.add(self)
 
     def spaws(self: T, game_map: GameMap, x: int, y: int) -> T:
         """
@@ -54,8 +59,30 @@ class Entity:
         clone = copy.deepcopy(self)
         clone.x = x
         clone.y = y
-        game_map.entities.add(clone)
+        clone.game_map = game_map
+        clone.game_map.entities.add(clone)
         return clone
+
+    def place(
+        self,
+        x: int,
+        y: int,
+        game_map: t.Optional[GameMap] = None
+    ) -> None:
+        """
+        Place this entity at a new location. Handles moving across GameMaps.
+        Parameters:
+            x (int): The x coordinate of the new location.
+            y (int): The y coordinate of the new locaiton.
+            game_map (Optional[GameMap]): The new map of the new location.
+        """
+        self.x = x
+        self.y = y
+        if game_map:
+            if hasattr(self, "game_map"):
+                self.game_map.entities.remove(self)
+            self.game_map = game_map
+            self.game_map.entities.add(self)
 
     def move(self, dx: int, dy: int) -> None:
         """

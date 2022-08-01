@@ -6,8 +6,10 @@ import typing as t
 
 from just_another_rogue import entity_factories
 from just_another_rogue import tile_types
-from just_another_rogue.entity import Entity
 from just_another_rogue.game_map import GameMap
+
+if t.TYPE_CHECKING:
+    from just_another_rogue.engine import Engine
 
 
 class RectangularRoom:
@@ -131,21 +133,6 @@ def tunel_between(
         yield x, y
 
 
-def generate_dungeon_old(map_width: int, map_heigth: int) -> GameMap:
-    dungeon = GameMap(map_width, map_heigth)
-
-    room_1 = RectangularRoom(x=20, y=15, width=10, height=15)
-    room_2 = RectangularRoom(x=35, y=15, width=10, height=15)
-
-    dungeon.tiles[room_1.inner] = tile_types.floor
-    dungeon.tiles[room_2.inner] = tile_types.floor
-
-    for x, y in tunel_between(room_2.center, room_1.center):
-        dungeon.tiles[x, y] = tile_types.floor
-
-    return dungeon
-
-
 def generate_dungeon(
     max_rooms: int,
     room_min_size: int,
@@ -153,7 +140,7 @@ def generate_dungeon(
     map_width: int,
     map_heigth: int,
     max_monster_per_room: int,
-    player: Entity,
+    engine: Engine,
 ) -> GameMap:
     """
     Generate a new dungeon map.
@@ -165,12 +152,12 @@ def generate_dungeon(
         map_height (int): The heigth of the GameMap to create.
         max_monster_per_room (int): Maximum number of monters that can be
             spawned into a room.
-        player (Player): The player Entity. We need this to know where to place
-            the player.
+        engine (Engine): The engine this dungeon is related to.
     Returns:
         GameMap:
     """
-    dungeon = GameMap(map_width, map_heigth, entities=[player])
+    player = engine.player
+    dungeon = GameMap(engine, map_width, map_heigth, entities=[player])
     rooms: t.List[RectangularRoom] = []
 
     for _ in range(max_rooms):
@@ -186,7 +173,7 @@ def generate_dungeon(
         dungeon.tiles[new_room.inner] = tile_types.floor
 
         if len(rooms) == 0:
-            player.x, player.y = new_room.center
+            player.place(*new_room.center, dungeon)
         else:
             for x, y in tunel_between(rooms[-1].center, new_room.center):
                 dungeon.tiles[x, y] = tile_types.floor
